@@ -1,0 +1,236 @@
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css");
+
+/* ═══════════════════════════════════════════════════
+   브랜드 컬러 시스템 (3-Color Palette)
+   ─────────────────────────────────────────────────
+   1. Yellow  #F5C842 — 신뢰·에너지·강조
+   2. Dark    #3D3D3D — 권위·프리미엄 
+   3. Orange  #EA5533 — CTA·긴박감·행동유도
+   ═══════════════════════════════════════════════════ */
+
+:root {
+  /* 브랜드 옐로우 (Primary Warm) */
+  --yellow: #F5C842;
+  --yellow-light: #FFD96A;
+  --yellow-pale: #FFF8E1;
+  --yellow-deep: #D9A825;
+
+  /* 브랜드 다크 (Authority) */
+  --dark: #3D3D3D;
+  --dark-light: #555555;
+  --dark-deep: #1A1A1A;
+  --dark-surface: #2A2A2A;
+
+  /* 브랜드 오렌지 (CTA / Action) */
+  --orange: #EA5533;
+  --orange-light: #FF7657;
+  --orange-deep: #C43E1E;
+
+  /* 중립 보조 */
+  --bg-warm: #FFFDF7;
+  --bg-cream: #FFF9EE;
+  --bg-cool-gray: #F4F3F0;
+  --text-body: #4A4A4A;
+  --text-muted: #7A7A7A;
+}
+
+/* ─── 기본 바디 ─── */
+body {
+  font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
+  background-color: var(--bg-warm);
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  font-size: 18px;
+  line-height: 1.75;
+  color: var(--dark);
+}
+
+/* ═══ 다이나믹 배경 시스템 (밋밋함 근본 해결) ═══ */
+
+/* 따뜻한 노란 그라디언트 배경 */
+.bg-warm-gradient {
+  background: linear-gradient(180deg, var(--bg-cream) 0%, var(--bg-warm) 50%, #FFFFFF 100%);
+}
+
+/* 다크 프리미엄 배경 */
+.bg-dark-premium {
+  background: linear-gradient(135deg, var(--dark-deep) 0%, var(--dark) 50%, var(--dark-surface) 100%);
+}
+
+/* 옐로우 포인트 메쉬 */
+.bg-mesh-yellow {
+  background-color: var(--bg-warm);
+  background-image: 
+    radial-gradient(ellipse at 0% 0%, rgba(245, 200, 66, 0.12) 0px, transparent 50%),
+    radial-gradient(ellipse at 100% 0%, rgba(234, 85, 51, 0.06) 0px, transparent 50%),
+    radial-gradient(ellipse at 50% 100%, rgba(245, 200, 66, 0.08) 0px, transparent 50%);
+}
+
+/* 다크 메쉬 (다크 섹션에서 사용) */
+.bg-mesh-dark {
+  background-color: var(--dark-deep);
+  background-image: 
+    radial-gradient(ellipse at 0% 0%, rgba(245, 200, 66, 0.08) 0px, transparent 50%),
+    radial-gradient(ellipse at 100% 0%, rgba(234, 85, 51, 0.06) 0px, transparent 50%),
+    radial-gradient(ellipse at 50% 100%, rgba(245, 200, 66, 0.04) 0px, transparent 50%);
+}
+
+/* 크림 스트라이프 패턴 (미세한 텍스처) */
+.bg-cream-textured {
+  background-color: var(--bg-cream);
+  background-image: 
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 40px,
+      rgba(245, 200, 66, 0.03) 40px,
+      rgba(245, 200, 66, 0.03) 41px
+    );
+}
+
+/* ─── Glassmorphism ─── */
+.glass-nav {
+  background: rgba(255, 253, 247, 0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(245, 200, 66, 0.2);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(245, 200, 66, 0.15);
+  box-shadow: 0 8px 32px 0 rgba(61, 61, 61, 0.06);
+}
+
+/* ─── 스크롤 애니메이션 ─── */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-delay-100 { transition-delay: 100ms; }
+.reveal-delay-200 { transition-delay: 200ms; }
+.reveal-delay-300 { transition-delay: 300ms; }
+.reveal-delay-400 { transition-delay: 400ms; }
+
+/* ─── FAQ 아코디언 ─── */
+.accordion-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+  opacity: 0;
+}
+
+.accordion-item.active .accordion-content {
+  max-height: 400px;
+  opacity: 1;
+}
+
+.accordion-item .arrow-icon {
+  transition: transform 0.3s ease;
+}
+
+.accordion-item.active .arrow-icon {
+  transform: rotate(180deg);
+}
+
+/* ─── 골드 그라디언트 텍스트 ─── */
+.text-gradient-gold {
+  background: linear-gradient(135deg, var(--yellow-deep) 0%, var(--yellow) 40%, var(--yellow-light) 70%, var(--yellow-deep) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ─── 펄스 애니메이션 ─── */
+@keyframes pulse-gold {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 10px 25px -5px rgba(245, 200, 66, 0.5);
+  }
+  50% {
+    transform: scale(1.02);
+    box-shadow: 0 20px 35px -5px rgba(245, 200, 66, 0.7);
+  }
+}
+
+.animate-pulse-gold {
+  animation: pulse-gold 2.5s infinite ease-in-out;
+}
+
+@keyframes pulse-orange {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 10px 20px -3px rgba(234, 85, 51, 0.45);
+  }
+  50% {
+    transform: scale(1.025);
+    box-shadow: 0 20px 30px -5px rgba(234, 85, 51, 0.65);
+  }
+}
+
+.animate-pulse-orange {
+  animation: pulse-orange 2s infinite ease-in-out;
+}
+
+/* ─── 카드 호버 ─── */
+.toss-card {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.toss-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 40px -5px rgba(61, 61, 61, 0.1);
+  border-color: rgba(245, 200, 66, 0.4);
+}
+
+/* ─── 인풋 포커스 ─── */
+input:focus, select:focus {
+  outline: none;
+  border-color: var(--orange);
+  box-shadow: 0 0 0 3px rgba(234, 85, 51, 0.15);
+}
+
+/* ─── 스크롤 탑 버튼 ─── */
+#scrollTopBtn {
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+#scrollTopBtn.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* ─── 옐로우 언더라인 데코 ─── */
+.yellow-underline {
+  text-decoration: underline;
+  text-decoration-color: var(--yellow);
+  text-decoration-thickness: 4px;
+  text-underline-offset: 6px;
+}
+
+/* ─── 옐로우 하이라이트 마커 ─── */
+.yellow-marker {
+  background: linear-gradient(transparent 55%, rgba(245, 200, 66, 0.35) 55%);
+  padding: 0 4px;
+}
+
+/* ─── 다크 배지 ─── */
+.badge-dark {
+  background-color: var(--dark);
+  color: var(--yellow);
+  font-weight: 800;
+  font-size: 0.75rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  letter-spacing: 0.05em;
+}
