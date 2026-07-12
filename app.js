@@ -1,3 +1,5 @@
+const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxj6tdTrTUA5vLrylR1SGyaiW3TFYQNacCyFZMkoeL4nU9pRJz8dQpwUQR9zkeq9KAX/exec";
+
 document.addEventListener("DOMContentLoaded", () => {
   // 1. Lucide 아이콘 초기화
   if (typeof lucide !== 'undefined') {
@@ -126,7 +128,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const thankYouModal = document.getElementById("thankYouModal");
   const closeModalBtn = document.getElementById("closeModalBtn");
 
-  leadForm.addEventListener("submit", (e) => {
+  leadForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
     const name = document.getElementById("name").value.trim();
@@ -171,7 +173,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
     console.log("DB 수집 완료: ", leadData);
     
-    // 로컬 스토리지에 저장하여 중복 제출 확인용 활용
+    // Google Sheets에 신청 정보를 저장
+    const submitButton = leadForm.querySelector('button[type="submit"]');
+    const originalButtonText = submitButton.textContent;
+
+    submitButton.disabled = true;
+    submitButton.textContent = "신청 정보를 저장하고 있습니다...";
+
+    try {
+      await saveApplicant(leadData);
+    } catch (error) {
+      console.error("신청 데이터 저장 실패:", error);
+      alert("신청 정보를 저장하지 못했습니다. 잠시 후 다시 시도해주세요.");
+      submitButton.disabled = false;
+      submitButton.textContent = originalButtonText;
+      return;
+    }
+
+    // 로컬 스토리지에는 중복 제출 확인 상태만 저장
     localStorage.setItem("healthcare_lead_submitted", "true");
 
     // 마케팅 추적 픽셀 가상 이벤트 호출 (콘솔 로깅 및 모의 실행)
@@ -183,7 +202,29 @@ document.addEventListener("DOMContentLoaded", () => {
     
     // 폼 초기화
     leadForm.reset();
+    submitButton.disabled = false;
+    submitButton.textContent = originalButtonText;
   });
+
+  async function saveApplicant(leadData) {
+    const payload = {
+      name: leadData.name,
+      phone: leadData.phone,
+      job: leadData.job,
+      agree: true,
+      source: leadData.utm.source,
+      medium: leadData.utm.medium,
+      campaign: leadData.utm.campaign,
+      page: window.location.href
+    };
+
+    await fetch(GOOGLE_APPS_SCRIPT_URL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify(payload)
+    });
+  }
 
   // 모달 닫기
   closeModalBtn.addEventListener("click", () => {
