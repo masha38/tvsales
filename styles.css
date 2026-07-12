@@ -247,6 +247,30 @@ body {
   }
 }
 
+/* Tablet: keep the cutout inside the visual column so it cannot cover the CTA buttons. */
+@media (min-width: 640px) and (max-width: 1023px) {
+  .hero-visual {
+    min-height: 520px;
+    margin-top: 0.75rem;
+  }
+
+  .hero-care-stage {
+    top: 14%;
+    right: 50%;
+    width: min(82%, 680px);
+    transform: translateX(50%);
+  }
+
+  .hero-care-scene {
+    transform: scale(1.14);
+  }
+
+  .hero-consultant-cutout {
+    right: -3%;
+    height: 112%;
+  }
+}
+
 /* 다크 메쉬 (다크 섹션에서 사용) */
 .bg-mesh-dark {
   background-color: var(--dark-deep);
