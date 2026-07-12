@@ -93,15 +93,15 @@ Build a clean, high-impact grid component displaying the "5無 Policy (No exam, 
 ### 2.4. Lead Magnet Form (Section 9)
 ```text
 Design a conversion-focused lead generation form for capturing potential partner DBs.
-- Form Title: "[한정 수량] 현직 영업인만 아는 헬스케어 상조 영업 비법서 무료 신청"
+- Form Title: "[한정 수량] 현직 영업인만 아는 헬스케어 상조 영업 자료 무료 신청"
 - Fields:
   1. Name: input type text, placeholder "성함을 입력해주세요"
   2. Phone: input type tel, placeholder "휴대폰 번호 (- 없이 입력)"
   3. Current Job: select option (보험설계사, 자동차/렌탈 영업, 부동산/금융, 은퇴준비/프리랜서, 기타)
   4. Region: select option (서울, 경기/인천, 충청, 경상, 전라, 강원/제주)
 - Consent checkbox: "개인정보 수집 및 제3자 제공에 동의합니다 (필수)"
-- Button: "지금 바로 무료 비법서 받기 (PDF)" (Full width button, glowing royal blue color gradient #0047AB to #0056D2, pulsating hover effect).
-- Visual asset next to form: 3D book mockup titled "헬스케어 상조 영업 비밀 비법서" (luxury dark navy cover with gold text).
+- Button: "지금 바로 무료 자료 받기 (PDF)" (Full width button, glowing royal blue color gradient #0047AB to #0056D2, pulsating hover effect).
+- Visual asset next to form: 3D book mockup titled "헬스케어 상조 실전 영업 자료" (luxury dark navy cover with gold text).
 ```
 
 ### 2.5. Insurance Leaders Testimonials (Section 8)
