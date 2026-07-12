@@ -132,7 +132,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const name = document.getElementById("name").value.trim();
     const phone = phoneInput.value.trim();
     const job = document.getElementById("job").value;
-    const region = document.getElementById("region").value;
     const agree = document.getElementById("agree").checked;
 
     // 상세 유효성 검사
@@ -152,11 +151,6 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    if (!region) {
-      alert("활동을 희망하시는 지역을 선택해주세요.");
-      return;
-    }
-
     if (!agree) {
       alert("개인정보 수집 및 이용 동의는 필수사항입니다.");
       return;
@@ -167,7 +161,6 @@ document.addEventListener("DOMContentLoaded", () => {
       name,
       phone,
       job,
-      region,
       timestamp: new Date().toISOString(),
       utm: {
         source: new URLSearchParams(window.location.search).get("utm_source") || "direct",
@@ -206,8 +199,7 @@ document.addEventListener("DOMContentLoaded", () => {
         'value': 1.0,
         'currency': 'KRW',
         'lead_name': data.name,
-        'lead_job': data.job,
-        'lead_region': data.region
+        'lead_job': data.job
       });
       console.log("GA4 generate_lead event sent");
     }
@@ -233,13 +225,12 @@ document.addEventListener("DOMContentLoaded", () => {
   if (kakaoQuickBtn) {
     kakaoQuickBtn.addEventListener("click", () => {
       // 카카오 싱크 간편 동의 UI 모의 구현
-      const mockConfirm = confirm("카카오 계정으로 간편 로그인하여 1초 만에 무료 비법서를 다운로드하시겠습니까?\n\n(제공 항목: 이름, 연락처)");
+      const mockConfirm = confirm("카카오 계정으로 간편 로그인하여 1초 만에 무료 자료를 다운로드하시겠습니까?\n\n(제공 항목: 이름, 연락처)");
       if (mockConfirm) {
         // 샘플 데이터 삽입 및 즉시 전환
         document.getElementById("name").value = "김카카오";
         document.getElementById("phone").value = "010-9876-5432";
         document.getElementById("job").value = "보험설계사";
-        document.getElementById("region").value = "서울";
         document.getElementById("agree").checked = true;
         
         // 폼 스크롤 이동
