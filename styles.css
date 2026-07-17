@@ -161,7 +161,7 @@ body {
 }
 
 .hero-slider-arrow-prev {
-  left: max(0.75rem, calc(50% + 0.25rem));
+  left: max(0.75rem, calc((100% - 80rem) / 2));
 }
 
 .hero-slider-arrow-next {
