@@ -6,6 +6,59 @@ document.addEventListener("DOMContentLoaded", () => {
     lucide.createIcons();
   }
 
+  // 메인 히어로 롤링 배너
+  const heroSlider = document.getElementById("heroSlider");
+  const heroSlides = Array.from(document.querySelectorAll("[data-hero-slide]"));
+  const heroDots = Array.from(document.querySelectorAll("[data-hero-dot]"));
+  let activeHeroSlide = 0;
+  let heroSliderTimer = null;
+
+  function showHeroSlide(index) {
+    activeHeroSlide = (index + heroSlides.length) % heroSlides.length;
+    heroSlides.forEach((slide, slideIndex) => {
+      const isActive = slideIndex === activeHeroSlide;
+      slide.classList.toggle("is-active", isActive);
+      slide.setAttribute("aria-hidden", String(!isActive));
+    });
+    heroDots.forEach((dot, dotIndex) => {
+      const isActive = dotIndex === activeHeroSlide;
+      dot.classList.toggle("is-active", isActive);
+      dot.setAttribute("aria-selected", String(isActive));
+    });
+  }
+
+  function stopHeroSlider() {
+    if (heroSliderTimer) {
+      window.clearInterval(heroSliderTimer);
+      heroSliderTimer = null;
+    }
+  }
+
+  function startHeroSlider() {
+    stopHeroSlider();
+    if (heroSlides.length < 2 || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    heroSliderTimer = window.setInterval(() => showHeroSlide(activeHeroSlide + 1), 6500);
+  }
+
+  if (heroSlider && heroSlides.length === heroDots.length && heroSlides.length > 1) {
+    heroDots.forEach((dot, index) => {
+      dot.addEventListener("click", () => {
+        showHeroSlide(index);
+        startHeroSlider();
+      });
+    });
+    heroSlider.addEventListener("mouseenter", stopHeroSlider);
+    heroSlider.addEventListener("mouseleave", startHeroSlider);
+    heroSlider.addEventListener("focusin", stopHeroSlider);
+    heroSlider.addEventListener("focusout", startHeroSlider);
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) stopHeroSlider();
+      else startHeroSlider();
+    });
+    showHeroSlide(0);
+    startHeroSlider();
+  }
+
   // 2. 스크롤 애니메이션 (Intersection Observer)
   const revealElements = document.querySelectorAll(".reveal");
   const revealObserver = new IntersectionObserver((entries, observer) => {

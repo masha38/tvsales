@@ -86,12 +86,13 @@
   </header>
 
   <!-- ═══════════════════ HERO ═══════════════════ -->
-  <section class="relative pt-32 pb-10 md:pt-40 md:pb-14 bg-mesh-yellow overflow-hidden">
+  <section id="heroSlider" class="hero-slider relative pt-32 pb-10 md:pt-40 md:pb-14 bg-mesh-yellow" aria-roledescription="carousel" aria-label="메인 프로모션">
     <!-- 배경 장식 -->
     <div class="absolute top-0 right-0 w-[600px] h-[600px] rounded-full bg-brand-yellow/5 -translate-y-1/2 translate-x-1/4"></div>
     <div class="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full bg-brand-orange/3 translate-y-1/2 -translate-x-1/4"></div>
 
-    <div class="max-w-7xl mx-auto px-4 md:px-8 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
+    <div class="hero-slider-shell max-w-7xl mx-auto px-4 md:px-8 relative z-10">
+      <div class="hero-slide is-active grid grid-cols-1 lg:grid-cols-12 gap-12 items-center" data-hero-slide aria-hidden="false">
       <!-- 히어로 카피 -->
       <div class="hero-copy lg:col-span-6 text-center lg:text-left reveal">
         <span class="hero-recommendation-badge inline-flex items-center gap-2">
@@ -139,6 +140,56 @@
           </div>
         </div>
       </div>
+      </div>
+
+      <div class="hero-slide grid grid-cols-1 lg:grid-cols-12 gap-12 items-center" data-hero-slide aria-hidden="true">
+        <div class="hero-copy hero-leadership-copy lg:col-span-6 text-center lg:text-left">
+          <span class="hero-recommendation-badge inline-flex items-center gap-2">
+            <i data-lucide="sparkles" class="w-4 h-4"></i>
+            <span>성장을 이끄는 리더의 새로운 기회</span>
+          </span>
+          <h2 class="hero-main-title text-brand-dark-deep">
+            <span class="hero-title-line">관리자의 비젼으로</span>
+            <span class="hero-title-line"><strong class="hero-highlight hero-highlight-profit">더 큰 성공</strong>을 만나세요</span>
+          </h2>
+          <p class="hero-description text-sm md:text-base text-[#4A4A4A] leading-relaxed max-w-2xl mx-auto lg:mx-0">
+            <strong>팀과 함께 성장하는 새로운 커리어.</strong><br>
+            안정적인 수익과 보람을 동시에 시작하세요.
+          </p>
+          <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">
+            <a href="#formSection" class="w-full sm:w-auto bg-brand-orange hover:bg-brand-orange-deep text-white font-extrabold px-7 py-4 rounded-xl shadow-lg transition-all text-lg flex items-center justify-center gap-2 animate-pulse-orange">
+              <i data-lucide="users" class="w-5 h-5"></i>관리자 커리어 알아보기
+            </a>
+            <a href="https://open.kakao.com/o/gbeEvrDi" target="_blank" class="w-full sm:w-auto bg-[#FEE500] hover:bg-[#FEE500]/90 text-brand-dark font-extrabold px-7 py-4 rounded-xl shadow-md transition-all text-lg flex items-center justify-center gap-2">
+              <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 3.185-9 7.11 0 2.507 1.64 4.707 4.12 5.922-.28 1.045-.9 3.37-.9 3.37 0 .15.09.28.24.28a.33.33 0 00.16-.04s2.61-1.745 3.65-2.443C10.74 17.11 11.36 17.15 12 17.15c4.97 0 9-3.185 9-7.11C21 6.185 16.97 3 12 3z"/></svg>카카오 1:1 빠른 상담
+            </a>
+          </div>
+        </div>
+
+        <div class="hero-visual hero-leadership-visual lg:col-span-6 relative">
+          <div class="absolute inset-0 bg-gradient-to-tr from-brand-yellow/20 to-brand-orange/10 rounded-3xl -rotate-3 transform scale-95 blur-xl"></div>
+          <div class="hero-leadership-stage">
+            <div class="hero-leadership-frame">
+              <img src="./images/hero-leadership-background.png" alt="현대적인 회의실에서 팀장을 기다리는 직장인 팀원들" class="hero-leadership-image">
+            </div>
+            <img src="./images/female-leader-cutout.png" alt="팀과 함께 성장하는 여성 관리자" class="hero-leadership-cutout">
+          </div>
+          <div class="hero-leadership-card absolute z-[3] bottom-4 left-4 bg-white p-4 rounded-2xl shadow-xl border border-brand-yellow/30 flex items-center gap-3">
+            <div class="w-14 h-14 rounded-xl bg-brand-yellow/15 flex items-center justify-center text-brand-orange">
+              <i data-lucide="chart-no-axes-combined" class="w-7 h-7"></i>
+            </div>
+            <div>
+              <div class="text-xs text-[#7A7A7A] font-bold">리더십 + 팀워크</div>
+              <div class="text-base font-black text-brand-dark">함께 만드는 더 큰 성장</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-slider-controls relative z-20" role="tablist" aria-label="메인 배너 선택">
+      <button type="button" class="hero-slider-dot is-active" data-hero-dot role="tab" aria-selected="true" aria-label="첫 번째 배너 보기"></button>
+      <button type="button" class="hero-slider-dot" data-hero-dot role="tab" aria-selected="false" aria-label="두 번째 배너 보기"></button>
     </div>
   </section>
 
