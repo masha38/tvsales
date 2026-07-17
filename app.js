@@ -103,11 +103,13 @@ document.addEventListener("DOMContentLoaded", () => {
       // 기존에 열려 있는 다른 FAQ 항목 모두 닫기
       faqItems.forEach(otherItem => {
         otherItem.classList.remove("active");
+        otherItem.querySelector(".accordion-header")?.setAttribute("aria-expanded", "false");
       });
 
       // 클릭한 항목 토글
       if (!isActive) {
         item.classList.add("active");
+        header.setAttribute("aria-expanded", "true");
       }
     });
   });
@@ -117,7 +119,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const stickyBar = document.getElementById("stickyCtaBar");
   const scrollTopBtn = document.getElementById("scrollTopBtn");
 
-  window.addEventListener("scroll", () => {
+  function updateScrollUi() {
     const scrollY = window.scrollY;
 
     // 헤더 투명도 제어
@@ -133,11 +135,16 @@ document.addEventListener("DOMContentLoaded", () => {
     if (scrollY > 500) {
       stickyBar.classList.remove("translate-y-full");
       scrollTopBtn.classList.add("show");
+      document.body.classList.add("sticky-cta-visible");
     } else {
       stickyBar.classList.add("translate-y-full");
       scrollTopBtn.classList.remove("show");
+      document.body.classList.remove("sticky-cta-visible");
     }
-  });
+  }
+
+  window.addEventListener("scroll", updateScrollUi, { passive: true });
+  updateScrollUi();
 
   // 탑 버튼 클릭 이벤트
   scrollTopBtn.addEventListener("click", () => {
@@ -165,51 +172,89 @@ document.addEventListener("DOMContentLoaded", () => {
   const leadForm = document.getElementById("leadForm");
   const thankYouModal = document.getElementById("thankYouModal");
   const closeModalBtn = document.getElementById("closeModalBtn");
+  const privacyModal = document.getElementById("privacyModal");
+  const openPrivacyModalBtn = document.getElementById("openPrivacyModalBtn");
+  const closePrivacyModalBtn = document.getElementById("closePrivacyModalBtn");
+  const closePrivacyModalIconBtn = document.getElementById("closePrivacyModalIconBtn");
+  const formStatus = document.getElementById("formStatus");
+  let privacyModalTrigger = null;
+  let thankYouModalTrigger = null;
+
+  function setFormStatus(message, type = "info", field = null) {
+    formStatus.textContent = message;
+    formStatus.classList.remove("hidden", "is-error", "is-success", "is-info");
+    formStatus.classList.add(`is-${type}`);
+    field?.focus();
+  }
+
+  function openPrivacyModal() {
+    privacyModalTrigger = document.activeElement;
+    privacyModal.classList.remove("hidden");
+    privacyModal.classList.add("flex");
+    document.body.style.overflow = "hidden";
+    closePrivacyModalIconBtn.focus();
+  }
+
+  function closePrivacyModal() {
+    privacyModal.classList.add("hidden");
+    privacyModal.classList.remove("flex");
+    document.body.style.overflow = "";
+    privacyModalTrigger?.focus();
+  }
+
+  openPrivacyModalBtn.addEventListener("click", openPrivacyModal);
+  closePrivacyModalBtn.addEventListener("click", closePrivacyModal);
+  closePrivacyModalIconBtn.addEventListener("click", closePrivacyModal);
+  privacyModal.addEventListener("click", (event) => {
+    if (event.target === privacyModal) closePrivacyModal();
+  });
 
   leadForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const name = document.getElementById("name").value.trim();
+    const nameInput = document.getElementById("name");
+    const jobInput = document.getElementById("job");
+    const agreeInput = document.getElementById("agree");
+    const name = nameInput.value.trim();
     const phone = phoneInput.value.trim();
-    const job = document.getElementById("job").value;
-    const agree = document.getElementById("agree").checked;
+    const job = jobInput.value;
+    const agree = agreeInput.checked;
 
     // 상세 유효성 검사
     if (!name || name.length < 2) {
-      alert("올바른 성함을 입력해주세요 (2자 이상).");
+      setFormStatus("성함을 두 글자 이상 입력해 주세요.", "error", nameInput);
       return;
     }
 
     const phoneRegex = /^010-[0-9]{3,4}-[0-9]{4}$/;
     if (!phoneRegex.test(phone)) {
-      alert("올바른 휴대폰 번호 형식(010-XXXX-XXXX)을 확인해주세요.");
+      setFormStatus("휴대폰 번호를 010-XXXX-XXXX 형식으로 확인해 주세요.", "error", phoneInput);
       return;
     }
 
     if (!job) {
-      alert("현재 또는 이전 직업군을 선택해주세요.");
+      setFormStatus("현재 또는 이전 직업군을 선택해 주세요.", "error", jobInput);
       return;
     }
 
     if (!agree) {
-      alert("개인정보 수집 및 이용 동의는 필수사항입니다.");
+      setFormStatus("상담 신청을 위해 개인정보 수집 및 이용 동의가 필요합니다.", "error", agreeInput);
       return;
     }
 
     // 리드 객체 생성 (실제 운영 시 API 호출을 통해 DB 저장)
+    const searchParams = new URLSearchParams(window.location.search);
     const leadData = {
       name,
       phone,
       job,
       timestamp: new Date().toISOString(),
       utm: {
-        source: new URLSearchParams(window.location.search).get("utm_source") || "direct",
-        medium: new URLSearchParams(window.location.search).get("utm_medium") || "none",
-        campaign: new URLSearchParams(window.location.search).get("utm_campaign") || "none"
+        source: searchParams.get("utm_source") || "direct",
+        medium: searchParams.get("utm_medium") || "none",
+        campaign: searchParams.get("utm_campaign") || "none"
       }
     };
-
-    console.log("DB 수집 완료: ", leadData);
     
     // Google Sheets에 신청 정보를 저장
     const submitButton = leadForm.querySelector('button[type="submit"]');
@@ -217,34 +262,38 @@ document.addEventListener("DOMContentLoaded", () => {
 
     submitButton.disabled = true;
     submitButton.textContent = "신청 정보를 저장하고 있습니다...";
+    setFormStatus("신청 정보를 안전하게 전송하고 있습니다.", "info");
 
     try {
       await saveApplicant(leadData);
     } catch (error) {
       console.error("신청 데이터 저장 실패:", error);
-      alert("신청 정보를 저장하지 못했습니다. 잠시 후 다시 시도해주세요.");
+      setFormStatus("신청 정보를 저장하지 못했습니다. 잠시 후 다시 시도해 주세요.", "error");
       submitButton.disabled = false;
       submitButton.textContent = originalButtonText;
       return;
     }
 
-    // 로컬 스토리지에는 중복 제출 확인 상태만 저장
-    localStorage.setItem("healthcare_lead_submitted", "true");
-
-    // 마케팅 추적 픽셀 가상 이벤트 호출 (콘솔 로깅 및 모의 실행)
-    triggerPixelEvents(leadData);
+    // 설치된 경우에만 마케팅 전환 이벤트 호출
+    triggerPixelEvents();
 
     // 모달 노출 (감사 팝업)
+    thankYouModalTrigger = submitButton;
     thankYouModal.classList.remove("hidden");
     thankYouModal.classList.add("flex");
+    document.body.style.overflow = "hidden";
+    closeModalBtn.focus();
     
     // 폼 초기화
     leadForm.reset();
+    setFormStatus("상담 신청이 정상적으로 접수되었습니다.", "success");
     submitButton.disabled = false;
     submitButton.textContent = originalButtonText;
   });
 
   async function saveApplicant(leadData) {
+    const controller = new AbortController();
+    const timeoutId = window.setTimeout(() => controller.abort(), 12000);
     const payload = {
       name: leadData.name,
       phone: leadData.phone,
@@ -256,31 +305,44 @@ document.addEventListener("DOMContentLoaded", () => {
       page: window.location.href
     };
 
-    await fetch(GOOGLE_APPS_SCRIPT_URL, {
-      method: "POST",
-      mode: "no-cors",
-      headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify(payload)
-    });
+    try {
+      await fetch(GOOGLE_APPS_SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify(payload),
+        signal: controller.signal
+      });
+    } finally {
+      window.clearTimeout(timeoutId);
+    }
   }
 
-  // 모달 닫기
-  closeModalBtn.addEventListener("click", () => {
+  function closeThankYouModal() {
     thankYouModal.classList.add("hidden");
     thankYouModal.classList.remove("flex");
+    document.body.style.overflow = "";
+    thankYouModalTrigger?.focus();
+  }
+
+  closeModalBtn.addEventListener("click", closeThankYouModal);
+  thankYouModal.addEventListener("click", (event) => {
+    if (event.target === thankYouModal) closeThankYouModal();
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key !== "Escape") return;
+    if (!privacyModal.classList.contains("hidden")) closePrivacyModal();
+    else if (!thankYouModal.classList.contains("hidden")) closeThankYouModal();
   });
 
   // 픽셀 이벤트 트리거 함수 (GA4, Facebook Pixel, Kakao Pixel 대응)
-  function triggerPixelEvents(data) {
+  function triggerPixelEvents() {
     // 1. GA4 이벤트
     if (typeof gtag !== 'undefined') {
       gtag('event', 'generate_lead', {
         'value': 1.0,
-        'currency': 'KRW',
-        'lead_name': data.name,
-        'lead_job': data.job
+        'currency': 'KRW'
       });
-      console.log("GA4 generate_lead event sent");
     }
 
     // 2. Meta Pixel
@@ -289,33 +351,11 @@ document.addEventListener("DOMContentLoaded", () => {
         content_name: 'Healthcare Sangjo Partner',
         status: 'completed'
       });
-      console.log("Meta Pixel Lead event sent");
     }
 
     // 3. Kakao Pixel
     if (typeof kakaoPixel !== 'undefined') {
       kakaoPixel('CompleteRegistration');
-      console.log("Kakao Pixel CompleteRegistration sent");
     }
-  }
-
-  // 8. 카카오 싱크 및 간편가입 모의 연동
-  const kakaoQuickBtn = document.getElementById("kakaoQuickBtn");
-  if (kakaoQuickBtn) {
-    kakaoQuickBtn.addEventListener("click", () => {
-      // 카카오 싱크 간편 동의 UI 모의 구현
-      const mockConfirm = confirm("카카오 계정으로 간편 로그인하여 1초 만에 무료 자료를 다운로드하시겠습니까?\n\n(제공 항목: 이름, 연락처)");
-      if (mockConfirm) {
-        // 샘플 데이터 삽입 및 즉시 전환
-        document.getElementById("name").value = "김카카오";
-        document.getElementById("phone").value = "010-9876-5432";
-        document.getElementById("job").value = "보험설계사";
-        document.getElementById("agree").checked = true;
-        
-        // 폼 스크롤 이동
-        const target = document.getElementById("formSection");
-        target.scrollIntoView({ behavior: "smooth" });
-      }
-    });
   }
 });

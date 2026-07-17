@@ -34,6 +34,11 @@
   --text-muted: #7A7A7A;
 }
 
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 6rem;
+}
+
 /* ─── 기본 바디 ─── */
 body {
   font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
@@ -43,6 +48,20 @@ body {
   font-size: 18px;
   line-height: 1.75;
   color: var(--dark);
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 3px solid rgba(234, 85, 51, 0.32);
+  outline-offset: 3px;
+}
+
+button:disabled {
+  cursor: wait;
+  opacity: 0.72;
+  animation: none !important;
 }
 
 /* 작은 보조 문구의 상업용 가독성 보강 */
@@ -480,9 +499,17 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
   .hero-slide,
-  .hero-slider-dot {
+  .hero-slider-dot,
+  .reveal,
+  .animate-pulse-gold,
+  .animate-pulse-orange {
     transition: none;
+    animation: none;
   }
 }
 
@@ -638,6 +665,78 @@ input:focus, select:focus {
   outline: none;
   border-color: var(--orange);
   box-shadow: 0 0 0 3px rgba(234, 85, 51, 0.15);
+}
+
+.form-status {
+  padding: 0.85rem 1rem;
+  border-radius: 0.85rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.form-status.is-info {
+  background: #fff8e1;
+  color: #785a12;
+}
+
+.form-status.is-error {
+  background: #fff0ec;
+  color: #a8331a;
+}
+
+.form-status.is-success {
+  background: #ecf8f2;
+  color: #176743;
+}
+
+.commercial-assurance {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.6rem;
+  color: #666;
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.commercial-assurance span {
+  display: flex;
+  min-height: 3.2rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0.6rem 0.45rem;
+  border: 1px solid rgba(217, 168, 37, 0.22);
+  border-radius: 0.9rem;
+  background: #fffdf7;
+}
+
+.commercial-assurance svg {
+  width: 1rem;
+  height: 1rem;
+  flex: 0 0 auto;
+  color: var(--orange);
+}
+
+.kakao-float,
+#scrollTopBtn {
+  transition: bottom 0.3s ease, opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+}
+
+.sticky-cta-visible .kakao-float {
+  bottom: 7rem;
+}
+
+.sticky-cta-visible #scrollTopBtn {
+  bottom: 11.5rem;
+}
+
+@media (max-width: 639px) {
+  .commercial-assurance {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* ─── 스크롤 탑 버튼 ─── */
