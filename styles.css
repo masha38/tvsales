@@ -89,6 +89,7 @@ body {
 
 .hero-slider-shell {
   position: relative;
+  display: grid;
 }
 
 .hero-slider {
@@ -96,31 +97,29 @@ body {
 }
 
 .hero-slide {
+  grid-area: 1 / 1;
+  position: relative;
+  z-index: 0;
   width: 100%;
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-  transform: scale(0.992);
-  filter: blur(1.5px);
+  backface-visibility: hidden;
+  will-change: opacity;
   transition:
-    opacity 0.85s cubic-bezier(0.4, 0, 0.2, 1),
-    transform 0.85s cubic-bezier(0.4, 0, 0.2, 1),
-    filter 0.85s cubic-bezier(0.4, 0, 0.2, 1),
-    visibility 0s linear 0.85s;
+    opacity 0.72s cubic-bezier(0.4, 0, 0.2, 1),
+    visibility 0s linear 0.72s;
 }
 
 .hero-slide:not(.is-active) {
-  position: absolute;
-  inset: 0;
+  z-index: 0;
 }
 
 .hero-slide.is-active {
-  position: relative;
+  z-index: 1;
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
-  transform: scale(1);
-  filter: blur(0);
   transition-delay: 0s;
 }
 
