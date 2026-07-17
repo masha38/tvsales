@@ -156,6 +156,7 @@ body {
 }
 
 .hero-main-title {
+  width: 100%;
   font-family: "Pretendard Variable", Pretendard, sans-serif;
   font-size: clamp(2.05rem, 4.2vw, 3.55rem);
   font-weight: 540;
@@ -215,6 +216,7 @@ body {
 }
 
 .hero-description {
+  width: 100%;
   padding-left: 1.15rem;
   border-left: 2px solid rgba(217, 168, 37, 0.5);
   font-weight: 450;
@@ -223,6 +225,29 @@ body {
 .hero-description strong {
   color: var(--dark-deep);
   font-weight: 650;
+}
+
+.hero-actions {
+  width: 100%;
+}
+
+.hero-floating-card {
+  width: min(16rem, calc(100% - 2rem));
+  height: 5.5rem;
+}
+
+@media (min-width: 640px) {
+  .hero-actions {
+    width: auto;
+  }
+
+  .hero-action-primary {
+    width: 18rem !important;
+  }
+
+  .hero-action-secondary {
+    width: 14.25rem !important;
+  }
 }
 
 .hero-visual {
