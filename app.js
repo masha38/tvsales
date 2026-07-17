@@ -10,6 +10,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const heroSlider = document.getElementById("heroSlider");
   const heroSlides = Array.from(document.querySelectorAll("[data-hero-slide]"));
   const heroDots = Array.from(document.querySelectorAll("[data-hero-dot]"));
+  const heroPrevButton = document.querySelector("[data-hero-prev]");
+  const heroNextButton = document.querySelector("[data-hero-next]");
+  const HERO_SLIDE_INTERVAL = 4500;
   let activeHeroSlide = 0;
   let heroSliderTimer = null;
 
@@ -37,7 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function startHeroSlider() {
     stopHeroSlider();
     if (heroSlides.length < 2 || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    heroSliderTimer = window.setInterval(() => showHeroSlide(activeHeroSlide + 1), 6500);
+    heroSliderTimer = window.setInterval(() => showHeroSlide(activeHeroSlide + 1), HERO_SLIDE_INTERVAL);
   }
 
   if (heroSlider && heroSlides.length === heroDots.length && heroSlides.length > 1) {
@@ -46,6 +49,21 @@ document.addEventListener("DOMContentLoaded", () => {
         showHeroSlide(index);
         startHeroSlider();
       });
+    });
+    heroPrevButton?.addEventListener("click", () => {
+      showHeroSlide(activeHeroSlide - 1);
+      startHeroSlider();
+    });
+    heroNextButton?.addEventListener("click", () => {
+      showHeroSlide(activeHeroSlide + 1);
+      startHeroSlider();
+    });
+    heroSlider.addEventListener("keydown", (event) => {
+      if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
+        event.preventDefault();
+        showHeroSlide(activeHeroSlide + (event.key === "ArrowRight" ? 1 : -1));
+        startHeroSlider();
+      }
     });
     heroSlider.addEventListener("mouseenter", stopHeroSlider);
     heroSlider.addEventListener("mouseleave", startHeroSlider);
