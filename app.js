@@ -90,39 +90,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // 6. 실시간 마감 카운트다운 타이머 (긴박감 유도)
-  // 오늘 밤 23시 59분 59초 기준 매일 리셋되는 타임아웃 계산
-  function updateTimer() {
-    const now = new Date();
-    const target = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59);
-    
-    let diff = target - now;
-    if (diff < 0) {
-      // 이미 지났다면 다음날 자정으로 타겟 설정
-      target.setDate(target.getDate() + 1);
-      diff = target - now;
-    }
-
-    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-    const minutes = Math.floor((diff / (1000 * 60)) % 60);
-    const seconds = Math.floor((diff / 1000) % 60);
-
-    // DOM 요소 업데이트 (index.html 내의 ID 매핑)
-    const hoursEl = document.getElementById("timer-hours");
-    const minsEl = document.getElementById("timer-mins");
-    const secsEl = document.getElementById("timer-secs");
-
-    if (hoursEl && minsEl && secsEl) {
-      hoursEl.textContent = String(hours).padStart(2, "0");
-      minsEl.textContent = String(minutes).padStart(2, "0");
-      secsEl.textContent = String(seconds).padStart(2, "0");
-    }
-  }
-
-  // 1초마다 타이머 실행
-  setInterval(updateTimer, 1000);
-  updateTimer(); // 첫 실행
-
   // 7. DB 신청 폼 제출 처리 (Lead Form Submit)
   const leadForm = document.getElementById("leadForm");
   const thankYouModal = document.getElementById("thankYouModal");
